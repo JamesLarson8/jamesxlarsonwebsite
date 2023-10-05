@@ -1,52 +1,26 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #900;
+    background-color: #000;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-
 }
 
 .container {
-    text-align: center;
     position: fixed;
     top: 5%;
+
 }
 
-.container h1 {
+.container h1, .container p {
     color: white;
-    font-size: 5em;
 }
-
-.container p {
-    color: #85FF9E;
-    font-size: 1.2em;
-    
-}
-
-header {
-    position: fixed;
-    top: 0%;
-    width: 100%;
-    height: 7%;
-    background: #323232;
-    z-index: 1;
-}
-
-nav {
-    display: flex;
-    justify-content: center;
-    padding: 0;
-    font-family: Roboto;
-    font-size: 1.2em;
-    }
 
 nav ul {
     list-style-type: none;
-    top: 50%;
 }
 
 nav ul li {
@@ -56,23 +30,6 @@ nav ul li {
 
 nav ul li a {
     text-decoration: none;
-    color: #F5D0C5;
-}
-
-main {
-    position: fixed;
-    top: 10%;
-    margin: 0;
-    padding: 0;
-}
-
-main h1 {
-    color: #721121;
-    text-align: center;
-}
-
-main p {
-
-    color: #B9FFB7;
-    text-align: center;
+    color: #7FFF00;
+    top: 20%
 }
