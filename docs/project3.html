@@ -1,24 +1,1163 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Project 1</title>
-    <link rel="stylesheet" type="text/css" href="../styles.css">
-    <script src="../main.js"></script>
-</head>
+<!doctype html>
+<!-- <title>{% block title %}{% endblock %} - Flaskr</title> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='mainpg.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='virtual-select.min.css') }}"> 
+<script src="{{ url_for('static', filename='virtual-select.js') }}"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="../index.html">Home</a></li>
-                <li><a href="project1.html">Project 1</a></li>
-                <li><a href="project2.html">Project 2</a></li>
-                <li><a href="project3.html">Project 3</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <h1>Project 3</h1>
-        <p>This is a placeholder for the third project.</p>
-    </main>
+    <div class="full-body-container">
+        <div class="top-text">
+
+            <div class="website-title">
+                <h1 id = "title">CityFood</h1>
+            </div>
+
+            <div class="directions">
+                <h3>Traveling to a new place and want restaurant recommendations?</h3>
+                <p>Give us your three favorite restaurants, destination state and zip code, and we'll give you recommendations based on that!</p>
+            </div>
+
+            <form method="post">
+                <label for="lname">First Restaurant:</label><br>
+                <input type="text" id="first" name="first" required><br>
+                <br>
+
+                <label for="lname">Second Restaurant:</label><br>
+                <input type="text" id="second" name="second" required><br>
+                <br>
+
+                <label for="lname">Third Restaurant:</label><br>
+                <input type="text" id="third" name="third" required><br>
+                    
+                <!-- <label for="lname">city:</label><br>
+                <input type="text" id="city" name="city" required><br> -->
+
+                <!-- <label for="city">Target City:</label>
+                    <div id="city-dropdown">
+                        <select name="city" id="city">
+                            <option value="">Select a state</option>
+                            <option value="AZ">Arizona</option>
+                            <option value="CA">California</option>
+                            <option value="FL">Florida</option>
+                            <option value="ID">Idaho</option>
+                            <option value="IN">Indiana</option>
+                            <option value="LA">Louisiana</option>
+                            <option value="MO">Montana</option>
+                            <option value="NJ">New Jersey</option>
+                            <option value="NV">Nevada</option>
+                            <option value="PA">Pennsylvania</option>
+                            <option value="TN">Tennessee</option>
+                        </select>
+                    </div>
+
+                <script>
+                    function showStates() {
+                    var dropdown = document.getElementById("city-dropdown");
+                    if (dropdown.style.display === "none") {
+                        dropdown.style.display = "block";
+                    } else {
+                        dropdown.style.display = "none";
+                    }
+                    }
+                </script> -->
+                <script>
+                    function getCitiesByState(cityStateSet) {
+                        var citiesByState = {};
+
+                        // Loop through each city, state pair
+                        for (var i = 0; i < cityStateSet.length; i++) {
+                            var cityState = cityStateSet[i];
+                            console.log(cityState); //giving state
+                            var city = cityState[0];
+                            console.log(city);
+                            var state = cityState[1];
+
+                            // If this state isn't already in the object, add it
+                            if (!citiesByState[state]) {
+                                citiesByState[state] = [];
+                            }
+
+                            // Add this city to the array for the current state
+                            citiesByState[state].push(city);
+                        };
+
+                        return citiesByState;
+                    }
+
+                    var cityStateSet = [  
+                        ['Speedway', 'IN'],
+                        ['Monroe Township', 'NJ'],
+                        ['Creve Coeur', 'MO'],
+                        ['Haddon Township', 'NJ'],
+                        ['Conshohocken', 'PA'],
+                        ['Winslow Township', 'NJ'],
+                        ['Upper Darby', 'PA'],
+                        ['Upper Chichester', 'PA'],
+                        ['Mccordsville', 'IN'],
+                        ['Bargersville', 'IN'],
+                        ['Castleton', 'IN'],
+                        ['West Chester PA', 'PA'],
+                        ['DONELSON', 'TN'],
+                        ['Riveridge', 'LA'],
+                        ['Spring House', 'PA'],
+                        ['Churchville', 'PA'],
+                        ['Darby', 'PA'],
+                        ['LOWER MERION', 'PA'],
+                        ['Pike Creek', 'DE'],
+                        ['Black Jack', 'MO'],
+                        ['Avondale', 'PA'],
+                        ['West Deptford Townsh', 'NJ'],
+                        ['Sicklerville', 'NJ'],
+                        ['Hockessin', 'DE'],
+                        ['Lawrence Township', 'NJ'],
+                        ['Concordville', 'PA'],
+                        ['Antioch', 'TN'],
+                        ['Violet', 'LA'],
+                        ['Redington Shore', 'FL'],
+                        ['Barrington', 'NJ'],
+                        ['St Louis', 'MO'],
+                        ['Media', 'PA'],
+                        ['Pipersville', 'PA'],
+                        ['Fairview', 'TN'],
+                        ['Fox Street', 'PA'],
+                        ['Town and Country ', 'MO'],
+                        ['Godfrey', 'IL'],
+                        ['Madison', 'IL'],
+                        ['Salem', 'NJ'],
+                        ['Cahokia', 'IL'],
+                        ['Elmwood', 'LA'],
+                        ['Swedeland', 'PA'],
+                        ['Wilmington ', 'DE'],
+                        ['New Port Richey', 'FL'],
+                        ['Collinsville', 'IL'],
+                        ['New Castle', 'DE'],
+                        ['Westmont - Haddon Towsship', 'NJ'],
+                        ['Brownsburg', 'IN'],
+                        ['NEW PORT RICHEY', 'FL'],
+                        ['Saint Ann', 'MO'],
+                        ['Town & Country', 'MO'],
+                        ['Pennsauken', 'NJ'],
+                        ['Fairview Village', 'PA'],
+                        ['Folsom', 'PA'],
+                        ['Hudson', 'FL'],
+                        ['New Palestine', 'IN'],
+                        ['Southport', 'IN'],
+                        ['Springfield', 'PA'],
+                        ['Sparks', 'NV'],
+                        ['Boone', 'NC'],
+                        ['Pemberton', 'NJ'],
+                        ['Milmont Park', 'PA'],
+                        ['Kulpsville', 'PA'],
+                        ['Glendora', 'NJ'],
+                        ['Willow Grove', 'PA'],
+                        ['Cherry Hill', 'NJ'],
+                        ['Greenwood', 'IN'],
+                        ['Clermont', 'IN'],
+                        ['Paoli', 'PA'],
+                        ['Elsmere', 'DE'],
+                        ['Richboro', 'PA'],
+                        ['Alloway', 'NJ'],
+                        ['Mercerville', 'NJ'],
+                        ['Corona de Tucson', 'AZ'],
+                        ['Edgemont', 'PA'],
+                        ['Cedar Brook', 'NJ'],
+                        ['Temple Terr', 'FL'],
+                        ['Mount Holly,', 'NJ'],
+                        ['Carpinteria', 'CA'],
+                        ['Saint Rose', 'LA'],
+                        ["Carney's Point", 'NJ'],
+                        ['Lawrence', 'NJ'],
+                        ['Overland', 'MO'],
+                        ['Charlotte', 'PA'],
+                        ['Fortville', 'IN'],
+                        ['Boothwyn', 'PA'],
+                        ['Isla Vista', 'CA'],
+                        ['Pennsville', 'NJ'],
+                        ['Frazer', 'PA'],
+                        ['Talleyville', 'DE'],
+                        ['Ambler', 'PA'],
+                        ['Westampton Township', 'NJ'],
+                        ['Valencia West', 'AZ'],
+                        ['Blvd', 'MO'],
+                        ['Bellefontaine Neighbors', 'MO'],
+                        ['Sun City', 'FL'],
+                        ['Kuna', 'ID'],
+                        ['Langhorne', 'PA'],
+                        ['Tabernacle', 'NJ'],
+                        ['Lindenwold', 'NJ'],
+                        ['Nampa', 'ID'],
+                        ['Penns Grove', 'NJ'],
+                        ['Wilmington Manor', 'DE'],
+                        ['Indianapolis', 'IN'],
+                        ['Gibsonton', 'FL'],
+                        ['Scott AFB', 'IL'],
+                        ['Hurffville', 'NJ'],
+                        ['Crestwood', 'MO'],
+                        ['Bristol', 'PA'],
+                        ['Plymouth Meeting', 'PA'],
+                        ['Shrewsbury', 'MO'],
+                        ['Ashland City', 'TN'],
+                        ['Sanatoga', 'PA'],
+                        ['Lebanon', 'IL'],
+                        ['Mont Clare', 'PA'],
+                        ['South Tucson', 'AZ'],
+                        ['Woodbury Hts.', 'NJ'],
+                        ['Goodlettsville', 'TN'],
+                        ['Jenkintown', 'PA'],
+                        ['Villanova', 'PA'],
+                        ['Carversville', 'PA'],
+                        ['Mt.Juliet', 'TN'],
+                        ['Hendersonville', 'TN'],
+                        ['Bridgeton', 'MO'],
+                        ['Pineville', 'PA'],
+                        ['NASHVILLE', 'TN'],
+                        ['Pleasant View', 'TN'],
+                        ['Ashland', 'TN'],
+                        ['Washington Twp', 'NJ'],
+                        ['National Park', 'NJ'],
+                        ['Mascoutah', 'IL'],
+                        ['Havertown', 'PA'],
+                        ['Elmer', 'NJ'],
+                        ['Moorestown', 'NJ'],
+                        ['Essington', 'PA'],
+                        ['wimauma', 'FL'],
+                        ['Willingboro', 'NJ'],
+                        ['MEDIA', 'PA'],
+                        ['Fairview Heights', 'IL'],
+                        ['Bridgeport', 'PA'],
+                        ['Cedars', 'PA'],
+                        ['Bellefontaine', 'MO'],
+                        ['Vail', 'CO'],
+                        ['Hulmeville', 'PA'],
+                        ['Mt. Holly', 'NJ'],
+                        ['LARGO', 'FL'],
+                        ['Eastampton Township', 'NJ'],
+                        ['Saintt Petersburg', 'FL'],
+                        ['Cold Springs', 'NV'],
+                        ['Bridgeton', 'NJ'],
+                        ['Cheltenham Township', 'PA'],
+                        ['Meridian', 'ID'],
+                        ['Clayton', 'MO'],
+                        ['TRENTON', 'NJ'],
+                        ['Lawrence', 'IN'],
+                        ['Riverview', 'FL'],
+                        ['Dover', 'FL'],
+                        ['spring city', 'PA'],
+                        ['Holicong', 'PA'],
+                        ['Woolwich Twp', 'NJ'],
+                        ['Beverly', 'NJ'],
+                        ['Edwardsville', 'IL'],
+                        ['Parkside', 'PA'],
+                        ['Belleair Blf', 'FL'],
+                        ['Drexel Hill', 'PA'],
+                        ['Birchrunville', 'PA'],
+                        ['Clarksville', 'TN'],
+                        ['Woodbury Heights', 'NJ'],
+                        ['Glen Mills', 'DE'],
+                        ['Westwego', 'LA'],
+                        ['Blackwood', 'NJ'],
+                        ['Clayton', 'NJ'],
+                        ['Festerville', 'PA'],
+                        ['Scott Afb', 'IL'],
+                        ['Philadelphia', 'PA'],
+                        ['Bala Cynwyd', 'PA'],
+                        ['Sherwood', 'AB'],
+                        ['Folsom', 'NJ'],
+                        ['Warrington', 'PA'],
+                        ['Ballwin', 'MO'],
+                        ['Hazelwood', 'MO'],
+                        ['Bethel Township', 'PA'],
+                        ['Belle Meade', 'TN'],
+                        ['Pleasant Township', 'IN'],
+                        ['Line Lexington', 'PA'],
+                        ['Hainesport', 'NJ'],
+                        ['W. Berlin', 'NJ'],
+                        ['Primos', 'PA'],
+                        ['Belle Chasse', 'LA'],
+                        ['Stead', 'NV'],
+                        ['Thorofare', 'NJ'],
+                        ['erdenheim', 'PA'],
+                        ['Lawrenceville', 'NJ'],
+                        ['Pennington', 'NJ'],
+                        ['Newark', 'DE'],
+                        ['Medford Lakes', 'NJ'],
+                        ['Wayne', 'PA'],
+                        ['Holiday', 'FL'],
+                        ['Vincentown', 'NJ'],
+                        ['Glenoldan', 'PA'],
+                        ['South Cinnaminson', 'NJ'],
+                        ['INpolis', 'IN'],
+                        ['Riverview Fl', 'FL'],
+                        ['Telford ', 'PA'],
+                        ['Smyrna', 'TN'],
+                        ['Berlin', 'NJ'],
+                        ['East Alton', 'IL'],
+                        ['Willingboro Township', 'NJ'],
+                        ['Christiana', 'DE'],
+                        ['Mount Juliet', 'TN'],
+                        ['Dellwood', 'MO'],
+                        ['Monroeville', 'NJ'],
+                        ['Stowe', 'PA'],
+                        ['Palm Harbor', 'FL'],
+                        ['Newtown', 'PA'],
+                        ['Montecito', 'CA'],
+                        ['Avondale', 'LA'],
+                        ['Tarpon Springs', 'FL'],
+                        ['Danville', 'IN'],
+                        ['Pennsauken Township', 'NJ'],
+                        ['South Tampa', 'FL'],
+                        ['Eddystone', 'PA'],
+                        ['St. Rose', 'LA'],
+                        ['Southampton', 'PA'],
+                        ['Shiloh', 'IL'],
+                        ['Woodson Terrace', 'MO'],
+                        ['Saint Peters', 'PA'],
+                        ['Hilltown', 'PA'],
+                        ['Montgomery', 'PA'],
+                        ['Fort Washington', 'PA'],
+                        ['Oreland', 'PA'],
+                        ['Green Lane', 'PA'],
+                        ['Runnemede', 'NJ'],
+                        ['Bristol Twp', 'PA'],
+                        ['Old Hickory', 'TN'],
+                        ['Jobstown', 'NJ'],
+                        ['Upper Pittsgrove', 'NJ'],
+                        ['ST. PETE BEACH', 'FL'],
+                        ['St. Davids', 'PA'],
+                        ['Caseyville', 'IL'],
+                        ['Center Square', 'PA'],
+                        ['Cottage Hills', 'IL'],
+                        ['Pennsylvania', 'PA'],
+                        ['St.Petersburg', 'FL'],
+                        ["Town 'N' Country", 'FL'],
+                        ['Port Richey', 'FL'],
+                        ['Maple Shade Township', 'NJ'],
+                        ['Limerick', 'PA'],
+                        ['Wilmington', 'DE'],
+                        ['Smithton', 'IL'],
+                        ['Ruskin', 'FL'],
+                        ['Shamong', 'NJ'],
+                        ['Atco', 'NJ'],
+                        ['Pine Hill', 'NJ'],
+                        ['Lithia', 'FL'],
+                        ['Lower Southampton Township', 'PA'],
+                        ['Montgomeryville', 'PA'],
+                        ['Newton', 'PA'],
+                        ['Gilbertsville', 'PA'],
+                        ['Trolley Square', 'DE'],
+                        ['Hermitage', 'TN'],
+                        ['Chester', 'PA'],
+                        ["Land O' Lakes", 'FL'],
+                        ['Freehold', 'NJ'],
+                        ['North Redington Bch', 'FL'],
+                        ['Gibbsboro', 'NJ'],
+                        ['Mt Holly', 'NJ'],
+                        ['Delran', 'NJ'],
+                        ['Cornwells Heights', 'PA'],
+                        ['Clementon', 'NJ'],
+                        ['New Britain', 'PA'],
+                        ['Yeadon', 'PA'],
+                        ['Southampton Township', 'NJ'],
+                        ['Haverford', 'PA'],
+                        ['Seminole', 'FL'],
+                        ['Catalina', 'AZ'],
+                        ['ST LOUIS', 'MO'],
+                        ['Oaklyn', 'NJ'],
+                        ['Garden City', 'ID'],
+                        ['Spring City', 'PA'],
+                        ['BOISE', 'ID'],
+                        ['Chesilhurst', 'NJ'],
+                        ['Wyndlake Condominium', 'FL'],
+                        ['Thorndale', 'PA'],
+                        ['Rock Hill', 'MO'],
+                        ['Frontenac', 'MO'],
+                        ['Harleysville', 'PA'],
+                        ['Pine Forge', 'PA'],
+                        ['Carrollwood', 'FL'],
+                        ['Jamison', 'PA'],
+                        ['Santa  Barbara', 'CA'],
+                        ['Masaryktown', 'FL'],
+                        ['Royersford ', 'PA'],
+                        ['Gloucester City', 'NJ'],
+                        ['Haddon Heights', 'NJ'],
+                        ['Largo', 'FL'],
+                        ['Madison', 'TN'],
+                        ['Haddon Twp', 'NJ'],
+                        ['Aston', 'DE'],
+                        ['Gulfport', 'FL'],
+                        ['Lansdale ', 'PA'],
+                        ['BRANDON', 'FL'],
+                        ['Lester', 'PA'],
+                        ['Malvern', 'PA'],
+                        ['Summerland', 'CA'],
+                        ['St. Louis', 'IL'],
+                        ['Valley Park', 'MO'],
+                        ['Warrington Township', 'PA'],
+                        ['King of Prussia', 'PA'],
+                        ['Tampa Palms', 'FL'],
+                        ['Fenton', 'MO'],
+                        ['Hatboro', 'PA'],
+                        ['Richmond Heights', 'MO'],
+                        ['Seffner', 'FL'],
+                        ['Wanamaker', 'IN'],
+                        ['Foster Pond', 'IL'],
+                        ['Town And Country', 'MO'],
+                        ['Tampa Bay', 'FL'],
+                        ['TAMPA', 'FL'],
+                        ['LOWER PROVIDENCE', 'PA'],
+                        ['Norwood', 'PA'],
+                        ['Doylestown', 'PA'],
+                        ['Royersford', 'PA'],
+                        ['Dunedin', 'FL'],
+                        ['Belmont Hills', 'PA'],
+                        ['Hamiltion', 'NJ'],
+                        ['Edgewater Park', 'NJ'],
+                        ['Pontoon Beach', 'IL'],
+                        ['Penndel', 'PA'],
+                        ['Saint Bernard', 'LA'],
+                        ['Palmyra', 'NJ'],
+                        ['Cumberland', 'IN'],
+                        ['Wynnewood', 'PA'],
+                        ['Burlington Township', 'NJ'],
+                        ['Rosemont', 'PA'],
+                        ['Luling', 'LA'],
+                        ['lawrence', 'IN'],
+                        ['Manayunk', 'PA'],
+                        ["Land O'lakes", 'FL'],
+                        ['Earth City', 'MO'],
+                        ['Saint Charles', 'MO'],
+                        ['Dublin', 'PA'],
+                        ['Lutz', 'FL'],
+                        ['Horsham', 'PA'],
+                        ['River Ridge', 'LA'],
+                        ['Quinton', 'NJ'],
+                        ['New Whiteland', 'IN'],
+                        ['Newtown Square', 'PA'],
+                        ['Warson Woods', 'MO'],
+                        ['Tucson', 'AZ'],
+                        ['Radnor', 'PA'],
+                        ['St. Ann', 'MO'],
+                        ['Audubon ', 'NJ'],
+                        ['Indian Rocks Beach', 'FL'],
+                        ['LITHIA', 'FL'],
+                        ['Liverpool', 'XMS'],
+                        ['Bridge City', 'LA'],
+                        ['San Antonio', 'FL'],
+                        ['Tarpon springs', 'FL'],
+                        ['TRINITY', 'FL'],
+                        ['Sappington', 'MO'],
+                        ['Roslyn', 'PA'],
+                        ['Woodlyn', 'PA'],
+                        ['Cinnaminson', 'NJ'],
+                        ['Meridian ', 'ID'],
+                        ['St.Louis', 'MO'],
+                        ['Norristown', 'PA'],
+                        ['Florence', 'NJ'],
+                        ['Perkasie', 'PA'],
+                        ['Chadds Ford', 'PA'],
+                        ['High Ridge', 'MO'],
+                        ['Pinellas park', 'FL'],
+                        ['Chalmette', 'LA'],
+                        ['NW Edmonton', 'AB'],
+                        ['Woolwich Township', 'NJ'],
+                        ['St. Louis', 'MO'],
+                        ['Downingtown', 'PA'],
+                        ['St Ann', 'MO'],
+                        ['Harahan', 'LA'],
+                        ['Sauget', 'IL'],
+                        ['Bellmawr', 'NJ'],
+                        ['Spanish Springs', 'NV'],
+                        ['Feasterville Trevose', 'PA'],
+                        ['Chesterfield', 'MO'],
+                        ['N.Wales', 'PA'],
+                        ['Prospect Park', 'PA'],
+                        ['indianopolis', 'IN'],
+                        ['Phoenixville', 'PA'],
+                        ['Lambertville', 'NJ'],
+                        ['Lebanon', 'TN'],
+                        ['Philadelphia ', 'PA'],
+                        ['Franklin', 'TN'],
+                        ['East Lansdowne', 'PA'],
+                        ['Marana', 'AZ'],
+                        ['Terrytown', 'LA'],
+                        ['Washington Park', 'IL'],
+                        ['Morrisville', 'PA'],
+                        ['Laurel Springs', 'NJ'],
+                        ['Telford', 'PA'],
+                        ['Alton', 'IL'],
+                        ['Collingdale', 'PA'],
+                        ['North Redington Beach', 'FL'],
+                        ['Quakertown', 'PA'],
+                        ['Waterford Works', 'NJ'],
+                        ['St Charles', 'MO'],
+                        ['Pennsville Township', 'NJ'],
+                        ['Ewing Township', 'NJ'],
+                        ['Sellersville', 'PA'],
+                        ['Voorhees Township', 'NJ'],
+                        ['Mount Laurel', 'NV'],
+                        ['Warminster', 'PA'],
+                        ['Mount Laurel', 'NJ'],
+                        ['Redingtn Shor', 'FL'],
+                        ['Westhampton', 'NJ'],
+                        ['DELRAN', 'NJ'],
+                        ['Des Peres', 'MO'],
+                        ['Glenside', 'PA'],
+                        ['Mount Lemmon', 'AZ'],
+                        ['Florence Township', 'NJ'],
+                        ['Wesley Chapel', 'FL'],
+                        ['Delran Township', 'NJ'],
+                        ['Brookhaven', 'PA'],
+                        ['Vail', 'AZ'],
+                        ['Silverdale', 'PA'],
+                        ['Bellville', 'IL'],
+                        ['Elk Township', 'NJ'],
+                        ['West Chester', 'PA'],
+                        ['Marlton', 'NJ'],
+                        ['Delran Twp', 'NJ'],
+                        ['Southwest Tampa', 'FL'],
+                        ['Ardmore', 'PA'],
+                        ['Swarthmore', 'PA'],
+                        ['Berry Hill', 'TN'],
+                        ['Southampton', 'NJ'],
+                        ['Madeira Beach', 'FL'],
+                        ['Maple Shade', 'NJ'],
+                        ['Swansea', 'IL'],
+                        ['Abington', 'PA'],
+                        ['Joelton', 'TN'],
+                        ['Whiteland', 'IN'],
+                        ['Bethalto', 'IL'],
+                        ['Winchester', 'MO'],
+                        ['Stanton', 'DE'],
+                        ['Webster Groves', 'MO'],
+                        ['Malaga', 'NJ'],
+                        ['Oldsmar', 'FL'],
+                        ['Maple Glen', 'PA'],
+                        ["O'fallon", 'IL'],
+                        ['Kenneth City', 'FL'],
+                        ["Town 'n' Country", 'FL'],
+                        ['Picture Rocks', 'AZ'],
+                        ['Glendale', 'MO'],
+                        ['Indianapolis ', 'IN'],
+                        ['Virginia City', 'NV'],
+                        ['Williamstown', 'NJ'],
+                        ['Pinellas', 'FL'],
+                        ['Huntingdon Valley', 'PA'],
+                        ['Brentwood', 'MO'],
+                        ['Cheltenham', 'PA'],
+                        ['Land o lakes', 'FL'],
+                        ['TEMPLE TERR', 'FL'],
+                        ['Saint Pete Beach', 'FL'],
+                        ['Thonosassa', 'FL'],
+                        ['Saint Albert', 'AB'],
+                        ['Kimmswick', 'MO'],
+                        ['Nashville ', 'TN'],
+                        ['Collingswood', 'NJ'],
+                        ['Sewell', 'NJ'],
+                        ['Trinity', 'FL'],
+                        ['St. Leo', 'FL'],
+                        ['Trenton', 'NJ'],
+                        ['MADISON', 'TN'],
+                        ['Mt. Juliet', 'TN'],
+                        ['Verdi', 'NV'],
+                        ['Gardenville', 'PA'],
+                        ['Mango', 'FL'],
+                        ['TUCSON', 'AZ'],
+                        ['Lula Lula', 'HI'],
+                        ['Bordentown', 'NJ'],
+                        ['Ozona', 'FL'],
+                        ['Clifton Heights', 'PA'],
+                        ['Camby', 'IN'],
+                        ['Granite City', 'IL'],
+                        ['Audubon', 'PA'],
+                        ['Chesterbrook', 'PA'],
+                        ['Gretna', 'LA'],
+                        ['S.Pasadena', 'FL'],
+                        ['Ewing', 'NJ'],
+                        ['Twn N Cntry', 'FL'],
+                        ['Feasterville-trevose', 'PA'],
+                        ['Fishers', 'IN'],
+                        ['Unionville', 'PA'],
+                        ['Rosewood Heights', 'IL'],
+                        ['Upper Gwynedd', 'PA'],
+                        ['Pitman', 'NJ'],
+                        ['Tinicum', 'PA'],
+                        ['Hammonton', 'NJ'],
+                        ['North Coventry Township', 'PA'],
+                        ['Avon', 'IN'],
+                        ['Feasterville-Trevose', 'PA'],
+                        ['Mendenhall', 'PA'],
+                        ['Franconia', 'PA'],
+                        ['Tampa,Fl', 'FL'],
+                        ['Green Park', 'MO'],
+                        ['Westtown', 'PA'],
+                        ['Millstadt', 'IL'],
+                        ['West Mount Holly', 'NJ'],
+                        ['South Pasadena', 'FL'],
+                        ['Franklin', 'NJ'],
+                        ['University City', 'MO'],
+                        ['Goleta', 'CA'],
+                        ['Vineland', 'NJ'],
+                        ['Wyncote', 'PA'],
+                        ['Southeast Edmonton', 'AB'],
+                        ['Corona De Tucson', 'AZ'],
+                        ['Lima', 'PA'],
+                        ['Upper Pottsgrove', 'PA'],
+                        ['CLIFTON HEIGHTS', 'PA'],
+                        ['Worcester', 'PA'],
+                        ['Sahuarita', 'AZ'],
+                        ['Hamilton Township', 'NJ'],
+                        ['Pottstown', 'PA'],
+                        ['Belle Chase', 'LA'],
+                        ['Feasterville', 'PA'],
+                        ['Mehlville', 'MO'],
+                        ['Harrison Township', 'NJ'],
+                        ['Somerdale', 'NJ'],
+                        ['Zieglerville', 'PA'],
+                        ['Kenneth', 'FL'],
+                        ['Dade City', 'FL'],
+                        ['Yardley', 'PA'],
+                        ['Brooklawn', 'NJ'],
+                        ['NORRISTOWN', 'PA'],
+                        ['Logan Township', 'NJ'],
+                        ['Upland', 'PA'],
+                        ['Wood River', 'IL'],
+                        ['Fairmont City', 'IL'],
+                        ['Martinsville', 'IN'],
+                        ['Lederach', 'PA'],
+                        ['Chester Springs', 'PA'],
+                        ['Tuscon', 'AZ'],
+                        ['Marrero', 'LA'],
+                        ['WEST CHESTER', 'PA'],
+                        ['Metarie', 'LA'],
+                        ['Holland Southampton', 'PA'],
+                        ['Kirklyn', 'PA'],
+                        ['Thonotosassa', 'FL'],
+                        ['Bensalem. Pa', 'PA'],
+                        ['Belleville', 'IL'],
+                        ['St Pete Beach', 'FL'],
+                        ['W Cherry Hill', 'NJ'],
+                        ['NEW ORLEANS', 'LA'],
+                        ['Glenmoore', 'PA'],
+                        ['Bryn Mawr', 'PA'],
+                        ['Ferguson', 'MO'],
+                        ['Whitestown', 'IN'],
+                        ['Hatfield', 'PA'],
+                        ['Mt Laurel Twp, NJ', 'NJ'],
+                        ['Fairview Hts', 'IL'],
+                        ['Gulph Mills', 'PA'],
+                        ['Edmonton', 'AB'],
+                        ['Woodbury', 'NJ'],
+                        ['Florissant', 'MO'],
+                        ['Merchantville', 'NJ'],
+                        ['Chalemette', 'LA'],
+                        ['Saint Louis', 'MO'],
+                        ['Pinellas Park', 'FL'],
+                        ['North Wales', 'PA'],
+                        ['Berwyn', 'PA'],
+                        ['Sherwood Park', 'AB'],
+                        ['Oldmans Township', 'NJ'],
+                        ['Waterloo', 'IL'],
+                        ['Hillsborough County', 'FL'],
+                        ['Garnet Valley', 'PA'],
+                        ['St Pete', 'FL'],
+                        ['Clearwater/ Countryside', 'FL'],
+                        ['Bayonet Point', 'FL'],
+                        ['St. Charles', 'MO'],
+                        ['St Louis Downtown', 'MO'],
+                        ['Colmar', 'PA'],
+                        ['Marlborough', 'MO'],
+                        ['Inglewood', 'TN'],
+                        ['Hilltop', 'NJ'],
+                        ['Bethel', 'PA'],
+                        ['Gibbstown', 'NJ'],
+                        ["O' Fallon", 'IL'],
+                        ['Enoch', 'AB'],
+                        ['Linwood', 'PA'],
+                        ['Holland', 'PA'],
+                        ['Largo (Walsingham)', 'FL'],
+                        ['Rural Hill', 'TN'],
+                        ['Newfield', 'NJ'],
+                        ['Normandy', 'MO'],
+                        ['East St Louis', 'IL'],
+                        ['Treasure Island', 'FL'],
+                        ['Temple Terrace', 'FL'],
+                        ['Flourtown', 'PA'],
+                        ['Wyndmoor', 'PA'],
+                        ['Fairview Hts.', 'IL'],
+                        ['Greater Northdale', 'FL'],
+                        ['Glen Carbon', 'IL'],
+                        ['West Collingswood Heights', 'NJ'],
+                        ['NORTH WALES', 'PA'],
+                        ['Trooper', 'PA'],
+                        ['Mt Laurel', 'NJ'],
+                        ['Maplewood', 'MO'],
+                        ['Paulsboro', 'NJ'],
+                        ['Boone', 'IN'],
+                        ['Springfield', 'TN'],
+                        ['Greenville', 'DE'],
+                        ['Riverton', 'NJ'],
+                        ['SPRINGHILL', 'FL'],
+                        ['Blooming Glen', 'PA'],
+                        ['St Louis County', 'MO'],
+                        ['Chalfont', 'PA'],
+                        ['Merion Station', 'PA'],
+                        ['Greenbrier', 'TN'],
+                        ['Elkins Park', 'PA'],
+                        ['Crum Lynne', 'PA'],
+                        ['Holmes', 'PA'],
+                        ['Drexel Heights', 'AZ'],
+                        ['Nolensville', 'TN'],
+                        ['Exton', 'PA'],
+                        ['Titusville', 'NJ'],
+                        ['Land o Lakes', 'FL'],
+                        ['Mc Cordsville', 'IN'],
+                        ['Franklinville', 'NJ'],
+                        ['Cane Ridge', 'TN'],
+                        ['tucson', 'AZ'],
+                        ['East Falls', 'PA'],
+                        ['Riverside', 'NJ'],
+                        ['Hamilton', 'NJ'],
+                        ['LANSDALE', 'PA'],
+                        ['Indian Shores', 'FL'],
+                        ['Newtown Sqaure', 'PA'],
+                        ['West Deptford', 'NJ'],
+                        ['Downtown', 'LA'],
+                        ['St.Ann', 'MO'],
+                        ["Land O'Lakes", 'FL'],
+                        ['Croydon', 'PA'],
+                        ['Troy', 'IL'],
+                        ['Hi-Nella', 'NJ'],
+                        ['Pittsgrove', 'NJ'],
+                        ['Affton', 'MO'],
+                        ['Voorhees', 'NJ'],
+                        ['St. Petersburg', 'FL'],
+                        ['Olivette', 'MO'],
+                        ['Bensalem', 'PA'],
+                        ['West Point', 'PA'],
+                        ['Skippack Village', 'PA'],
+                        ['Lansdale', 'PA'],
+                        ['Levittown', 'PA'],
+                        ['Haddonfield', 'NJ'],
+                        ['Imperial', 'MO'],
+                        ['Kalispell', 'MT'],
+                        ['Gallatin', 'TN'],
+                        ['Solebury', 'PA'],
+                        ['RENO', 'NV'],
+                        ['Bellevue', 'TN'],
+                        ['Berkeley', 'MO'],
+                        ['Flanders', 'NJ'],
+                        ['Redington Shores', 'FL'],
+                        ['LANGHORNE', 'PA'],
+                        ['St. Pete Beach', 'FL'],
+                        ['EdMonton', 'AB'],
+                        ['St Petersburg', 'FL'],
+                        ['CLEARWATER', 'FL'],
+                        ['Westville', 'NJ'],
+                        ['Montchanin', 'DE'],
+                        ['Valrico', 'FL'],
+                        ['St. Peters', 'MO'],
+                        ['St. Albert', 'AB'],
+                        ['La Vergne', 'TN'],
+                        ['Gwynedd', 'PA'],
+                        ['Cedarbrook', 'NJ'],
+                        ['Arabi', 'LA'],
+                        ['Mount Holly', 'NJ'],
+                        ['West Trenton', 'NJ'],
+                        ['St Petersurg', 'FL'],
+                        ['Safety Harbor', 'FL'],
+                        ['Buckingham', 'PA'],
+                        ['Metairie', 'LA'],
+                        ['Arnold', 'MO'],
+                        ['Fairless Hills', 'PA'],
+                        ['Evesham Township', 'NJ'],
+                        ['Sun City Center', 'FL'],
+                        ['Furlong', 'PA'],
+                        ['Roebling', 'NJ'],
+                        ['W.Chester', 'PA'],
+                        ['Ridley Park', 'PA'],
+                        ['Philly', 'PA'],
+                        ['Oakville', 'MO'],
+                        ['King Of Prussia', 'PA'],
+                        ['Newportville', 'PA'],
+                        ['Apollo Beach', 'FL'],
+                        ['Hancock', 'IN'],
+                        ['Narberth', 'PA'],
+                        ['Noblesville', 'IN'],
+                        ['ST. PETERSBURG', 'FL'],
+                        ['Jeffersonville', 'PA'],
+                        ['Blue Bell', 'PA'],
+                        ['Glassboro', 'NJ'],
+                        ['Audubon', 'NJ'],
+                        ['West Edmonton', 'AB'],
+                        ['Greenfield', 'IN'],
+                        ['Pinecrest West Park', 'FL'],
+                        ['Gwynedd Valley', 'PA'],
+                        ['Aston', 'PA'],
+                        ['Tampa Florida', 'FL'],
+                        ['Dresher', 'PA'],
+                        ['Town and Country', 'MO'],
+                        ['Gloucester Township', 'NJ'],
+                        ['Tylersport', 'PA'],
+                        ['Wenonah', 'NJ'],
+                        ['Devon', 'PA'],
+                        ['Moorestown-Lenola', 'NJ'],
+                        ['POTTSTOWN', 'PA'],
+                        ['Saint Leo', 'FL'],
+                        ['Trevose', 'PA'],
+                        ['Saint Petersburg Beach', 'FL'],
+                        ['Palm harbor', 'FL'],
+                        ['Columbus', 'NJ'],
+                        ['Spring Hill', 'FL'],
+                        ['East Norriton', 'PA'],
+                        ['Phila', 'PA'],
+                        ['Truckee', 'CA'],
+                        ['New Hope', 'PA'],
+                        ['Bucktown', 'LA'],
+                        ['Erial', 'NJ'],
+                        ['Mt. Laurel', 'NJ'],
+                        ['View', 'TN'],
+                        ['West Conshohocken', 'PA'],
+                        ['Lemay', 'MO'],
+                        ['West Bradford Township', 'PA'],
+                        ['Odessa', 'FL'],
+                        ['Concord Township', 'PA'],
+                        ['Souderton', 'PA'],
+                        ['Wycombe', 'PA'],
+                        ['Lawnside', 'NJ'],
+                        ['Claymont', 'DE'],
+                        ['Wrightstown', 'PA'],
+                        ['Green Valley', 'AZ'],
+                        ['Mansfield', 'NJ'],
+                        ['East Saint Louis', 'IL'],
+                        ['Citrus Park', 'FL'],
+                        ['goodlettsville', 'TN'],
+                        ['Collegeville', 'PA'],
+                        ['RIVERVIEW', 'FL'],
+                        ['Morton', 'PA'],
+                        ['Blackwood ', 'NJ'],
+                        ['Schwenksville', 'PA'],
+                        ['Sunset Hills', 'MO'],
+                        ['Gentilly', 'LA'],
+                        ['Sumneytown', 'PA'],
+                        ['Carmel', 'IN'],
+                        ['Meraux', 'LA'],
+                        ['Clarksboro', 'NJ'],
+                        ['Maryland Heights', 'MO'],
+                        ['West Berlin', 'NJ'],
+                        ['Tierra Verde', 'FL'],
+                        ['reno', 'NV'],
+                        ['Boise', 'ID'],
+                        ['Boise City', 'ID'],
+                        ['Nashville-Davidson metropolitan government (balance)', 'TN'],
+                        ['Hernando Bch', 'FL'],
+                        ['Tren', 'NJ'],
+                        ['Sun Valley', 'NV'],
+                        ['Woodstown', 'NJ'],
+                        ['Brentwood', 'TN'],
+                        ['Elverson', 'PA'],
+                        ['Wimauma', 'FL'],
+                        ['Stratford', 'NJ'],
+                        ['Ridley', 'PA'],
+                        ['Sullivan', 'MO'],
+                        ['WILLOW GROVE', 'PA'],
+                        ['East St. Louis', 'IL'],
+                        ['Bryn Athyn', 'PA'],
+                        ['Franklin', 'IN'],
+                        ['Camden', 'NJ'],
+                        ['Clearwater', 'FL'],
+                        ['Rockledge', 'PA'],
+                        ['Thornton', 'PA'],
+                        ['O Fallon', 'IL'],
+                        ['Broomall', 'PA'],
+                        ['sewell', 'NJ'],
+                        ['Pine HIll', 'NJ'],
+                        ['St. Louis County', 'MO'],
+                        ['Linfield', 'PA'],
+                        ['Clearwater Beach', 'FL'],
+                        ['Ladue', 'MO'],
+                        ['Magnolia', 'NJ'],
+                        ['Zionsville', 'IN'],
+                        ['Maryville', 'IL'],
+                        ['Jefferson', 'LA'],
+                        ['Hernando Beach', 'FL'],
+                        ['White House', 'TN'],
+                        ['N Redngtn Bch', 'FL'],
+                        ['East Nashville', 'TN'],
+                        ['Philadephia', 'PA'],
+                        ['Belleair Bluffs', 'FL'],
+                        ['Berlin Township', 'NJ'],
+                        ['Washington Crossing', 'PA'],
+                        ['Eaux Claires', 'AB'],
+                        ['Palmetto', 'FL'],
+                        ['Conshohoeken', 'PA'],
+                        ['E. Norristown', 'PA'],
+                        ['Lionville', 'PA'],
+                        ['Middletown', 'PA'],
+                        ['Bucks', 'PA'],
+                        ['Kimberton', 'PA'],
+                        ['wilmington', 'DE'],
+                        ['HUdson', 'FL'],
+                        ['McCordsville', 'IN'],
+                        ['Mantua Township', 'NJ'],
+                        ['Red Hill', 'PA'],
+                        ['Toughkenamon', 'PA'],
+                        ['London Grove', 'PA'],
+                        ['ST. Louis', 'MO'],
+                        ['Santa Barbara', 'CA'],
+                        ['Nashville', 'TN'],
+                        ['Saint Louis,', 'MO'],
+                        ['Land O Lakes', 'FL'],
+                        ['Casas Adobes', 'AZ'],
+                        ['Lumberton', 'NJ'],
+                        ['Perkiomenville', 'PA'],
+                        ['Pennsburg', 'PA'],
+                        ['St.Rose', 'LA'],
+                        ['Mt.Laurel', 'NJ'],
+                        ['Swedesboro', 'NJ'],
+                        ['Abington Township', 'PA'],
+                        ['Pilesgrove', 'NJ'],
+                        ['Mantua', 'NJ'],
+                        ['Manchester', 'MO'],
+                        ['Skippack', 'PA'],
+                        ['Dupo', 'IL'],
+                        ['Sassamansville', 'PA'],
+                        ['Breckenridge Hills', 'MO'],
+                        ['Carneys Point', 'NJ'],
+                        ['Oro Valley', 'AZ'],
+                        ['Westampton', 'NJ'],
+                        ['Algiers', 'LA'],
+                        ['Jennings', 'MO'],
+                        ['Glen Mills', 'PA'],
+                        ['St.Charles', 'MO'],
+                        ['Hollywood', 'PA'],
+                        ['Aldan', 'PA'],
+                        ['Kenner', 'LA'],
+                        ['Caln', 'PA'],
+                        ['St.  Charles', 'MO'],
+                        ['Oaks', 'PA'],
+                        ['Medford', 'NJ'],
+                        ['PHILA', 'PA'],
+                        ['Plainfield', 'IN'],
+                        ['Melrose Park', 'PA'],
+                        ['Gloucester', 'NJ'],
+                        ['St Albert', 'AB'],
+                        ['Mt Juliet', 'TN'],
+                        ['Kingston Springs', 'TN'],
+                        ['Pittsgrove Township', 'NJ'],
+                        ['Columbia', 'IL'],
+                        ['Eastampton', 'NJ'],
+                        ['Lawrence Township', 'IN'],
+                        ['Kennett Square', 'PA'],
+                        ['Lafayette Hill', 'PA'],
+                        ['Woolwich Twp.', 'NJ'],
+                        ['Town n Country', 'FL'],
+                        ['Tierre Verde', 'FL'],
+                        ['Reno', 'NV'],
+                        ['Eagleville', 'PA'],
+                        ['Turnersville', 'NJ'],
+                        ['Coatesville', 'PA'],
+                        ['Scott Air Force Base', 'IL'],
+                        ['Downtown', 'AB'],
+                        ['Plainfiled', 'IN'],
+                        ['Beaumont', 'AB'],
+                        ['Lahaska', 'PA'],
+                        ['Secane', 'PA'],
+                        ['Twin Oaks', 'MO'],
+                        ['Marcus Hook', 'PA'],
+                        ['Saint John', 'MO'],
+                        ['Chichester', 'PA'],
+                        ['Mullica Hill', 'NJ'],
+                        ['Mount Laurel Township', 'NJ'],
+                        ['Marshallton', 'DE'],
+                        ['Trainer', 'PA'],
+                        ['Freeburg', 'IL'],
+                        ['Wallingford', 'PA'],
+                        ['Erdenheim', 'PA'],
+                        ['Upper Southampton', 'PA'],
+                        ['philadelphia', 'PA'],
+                        ['Westchase', 'FL'],
+                        ['Pass-a-Grille Beach', 'FL'],
+                        ['Zephyrhills', 'FL'],
+                        ['Harvey', 'LA'],
+                        ['Sharon Hill', 'PA'],
+                        ['Bensalem Township', 'PA'],
+                        ['Ivyland', 'PA'],
+                        ['PINELLAS PARK', 'FL'],
+                        ['Delanco', 'NJ'],
+                        ['Saint Petersburg', 'FL'],
+                        ['Lutz fl', 'FL'],
+                        ['Eddington', 'PA'],
+                        ['East Edmonton', 'AB'],
+                        ['Deptford Township', 'NJ'],
+                        ['Indiana', 'IN'],
+                        ['Beech Grove', 'IN'],
+                        ['Burlington', 'NJ'],
+                        ['Gladwyne', 'PA'],
+                        ['Bel Ridge', 'MO'],
+                        ['Plant City', 'FL'],
+                        ['Evesham', 'NJ'],
+                        ['Bywater', 'LA'],
+                        ['Eagle', 'ID'],
+                        ['Mooresville', 'IN'],
+                        ['Plumsteadville', 'PA'],
+                        ['Goodletsville', 'TN'],
+                        ['Trappe', 'PA'],
+                        ['Wesley chapel', 'FL'],
+                        ['Tampa', 'FL'],
+                        ['Mount Ephraim', 'NJ'],
+                        ['Glenolden', 'PA'],
+                        ['Lansdowne', 'PA'],
+                        ['Folcroft', 'PA'],
+                        ['RADNOR', 'PA'],
+                        ['Boyertown', 'PA'],
+                        ['East Greenville', 'PA'],
+                        ['Mount Royal', 'NJ'],
+                        ['Washington Township', 'NJ'],
+                        ['UPPER MORELAND', 'PA'],
+                        ['Kirkwood', 'MO'],
+                        ['Westmont', 'NJ'],
+                        ['Newport', 'DE'],
+                        ['Whites Creek', 'TN'],
+                        ['Southwest Philadelphia', 'PA'],
+                        ['Peerless Park', 'MO'],
+                        ["O'Fallon", 'IL'],
+                        ['Brandon', 'FL'],
+                        ['Fieldsboro', 'NJ'],
+                        ['Balm', 'FL'],
+                        ['New Orleans', 'LA'],
+                        ['Deptford', 'NJ']
+                    ];
+
+                    // SORT CITIES ALPAHBETICALLY
+                    cityStateSet.sort(function(a, b) {
+                        var cityA = a[0].toUpperCase(); // convert city names to uppercase to ignore case sensitivity
+                        var cityB = b[0].toUpperCase();
+                        if (cityA < cityB) {
+                            return -1;
+                        }
+                        if (cityA > cityB) {
+                            return 1;
+                        }
+                        return 0;
+                    });
+
+                    var citiesByState = getCitiesByState(cityStateSet);                    
+
+                    function makeSubmenu(value) {
+                        if(value.length==0) document.getElementById("citySelect").innerHTML = "<option></option>";
+                        else {
+                            var citiesOptions = "";
+                            for(cityId in citiesByState[value]) {
+                                citiesOptions+="<option>"+citiesByState[value][cityId]+"</option>";
+                            }
+                            document.getElementById("citySelect").innerHTML = citiesOptions;
+                        }
+                    }
+
+                    function displaySelected() { var country = document.getElementById("stateSelect").value;
+                        var city = document.getElementById("citySelect").value;
+                        alert(country+"\n"+city);
+                        }
+
+                    function resetSelection() {
+                        document.getElementById("stateSelect").selectedIndex = 0;
+                        document.getElementById("citySelect").selectedIndex = 0;
+                        }
+                        
+                </script>
+                    <body onload="resetSelection()">
+                    <br>
+                    Target State:
+                    <br>
+                    <select id="stateSelect" size="1" onchange="makeSubmenu(this.value)" required>
+                        <option value="" disabled selected>Choose State</option>
+                        <option>AZ</option>
+                        <option>CA</option>
+                        <option>CO</option>
+                        <option>DE</option>
+                        <option>FL</option>
+                        <option>HI</option>
+                        <option>ID</option>
+                        <option>IL</option>
+                        <option>IN</option>
+                        <option>LA</option>
+                        <option>MO</option>
+                        <option>MT</option>
+                        <option>NC</option>
+                        <option>NJ</option>
+                        <option>NV</option>
+                        <option>PA</option>
+                        <option>TN</option>
+                    </select>
+                    <br>
+                    <br>
+
+                    Target City: 
+                    <br>
+                    <select id="citySelect" name="city"size="1" required>
+                        <option value="" disabled selected>Choose City</option>
+                        <option></option>
+                    </select>
+
+
+                <p></p>
+                <input type="submit"></button>
+            </form>
+
+        </div>
+
+
+        <!-- GOOGLE MAPS START -->
+        <div class = "wrap">
+            <form action = "" class = "form">
+                <input type="text" id = "latitude" placeholder = "latitude">
+                <input type="text" id = "longitude" placeholder = "longitude">
+            </form>
+
+            <div id="map"></div>
+
+        </div>
+
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+        <!-- GOOGLE MAPS END -->
+
+        <script>
+            let mapOptions = {
+                center:[42.444248, -76.482489],
+                zoom: 17
+            }
+    
+            let map = new L.map('map' , mapOptions);
+    
+            let layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+            map.addLayer(layer);
+    
+    
+            let marker = null;
+            map.on('click', (event)=> {
+    
+                if(marker !== null){
+                    map.removeLayer(marker);
+                }
+    
+                marker = L.marker([event.latlng.lat , event.latlng.lng]).addTo(map);
+    
+                document.getElementById('latitude').value = event.latlng.lat;
+                document.getElementById('longitude').value = event.latlng.lng;
+            })
+
+            
+        </script>
+
+    </div>
+
+    
+
 </body>
-</html>
