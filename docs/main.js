@@ -6,4 +6,5 @@ window.onload = () => {
     console.log("Greeting set");
     document.getElementById('greeting').textContent = greeting;
     document.getElementById('test').textContent = devmessage;
+    
 };

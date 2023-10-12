@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+</head>
+<body>
+    <div id="map" style="height: 400px;"></div>
+
+    <h2>You have input the restaurant names {{ input }}</h2>
+    <!-- <h1>We suggest trying these restaurants: {{ restaurant[0]['name'] }}, {{ restaurant[1]['name'] }}, {{ restaurant[2]['name'] }}</h1> -->
+    <h2>We suggest trying these restaurants: </h2>
+    <ul>
+        <li><h2>{{ restaurant[0]['name'] }}</h2></li>
+        <ul>
+            <li>{{ restaurant[0]['stars'] }} stars ({{ restaurant[0]['review_count'] }} reviews)</li>
+            <li><strong>Address:</strong> {{ restaurant[0]['address'] }}, {{ restaurant[0]['city'] }}, {{ restaurant[0]['state'] }} {{ restaurant[0]['postal_code'] }}</li>
+            <li><strong>Hours of Operation:</strong> {{ restaurant[0]['hours'] }}</li>
+        </ul>
+
+        <li><h2>{{ restaurant[1]['name'] }}</h2></li>
+        <ul>
+            <li>{{ restaurant[1]['stars'] }} stars ({{ restaurant[1]['review_count'] }} reviews)</li>
+            <li><strong>Address:</strong> {{ restaurant[1]['address'] }}, {{ restaurant[1]['city'] }}, {{ restaurant[1]['state'] }} {{ restaurant[1]['postal_code'] }}</li>
+            <li><strong>Hours of Operation:</strong> {{ restaurant[1]['hours'] }}</li>
+        </ul>
+
+        <li><h2>{{ restaurant[2]['name'] }}</h2></li>
+        <ul>
+            <li>{{ restaurant[2]['stars'] }} stars ({{ restaurant[2]['review_count'] }} reviews)</li>
+            <li><strong>Address:</strong> {{ restaurant[2]['address'] }}, {{ restaurant[2]['city'] }}, {{ restaurant[2]['state'] }} {{ restaurant[2]['postal_code'] }}</li>
+            <li><strong>Hours of Operation:</strong> {{ restaurant[2]['hours'] }}</li>
+        </ul>
+    </ul>
+    
+
+    <script>
+        // create a new Leaflet map centered at the first restaurant location
+        var mymap = L.map('map').setView([{{ restaurant[0]['latitude'] }}, {{ restaurant[0]['longitude'] }}], 13);
+
+        // add a tile layer to the map
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18
+        }).addTo(mymap);
+
+        // add markers for each restaurant location
+        var markers = L.featureGroup().addTo(mymap);
+        {% for r in restaurant %}
+            var marker = L.marker([{{ r['latitude'] }}, {{ r['longitude'] }}]).bindPopup("{{ r['name'] }}" + "<br>"+ "{{ r['address'] }}" + "<br>" + "{{ r['city'] }}" + ", " + "{{ r['state'] }}" + " " + "{{ r['postal_code'] }}");
+            markers.addLayer(marker);
+        {% endfor %}
+        mymap.fitBounds(markers.getBounds());
+    </script>
+</body>
+</html>

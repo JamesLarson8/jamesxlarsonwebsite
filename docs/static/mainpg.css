@@ -1,0 +1,120 @@
+.full-body-container{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    width:100%;
+    height:100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    background-color: #EADDCA;
+}
+
+#title {
+    /* color: #E8DED1 */
+    color: #6F4E37;
+}
+
+.website-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5vh;
+}
+
+.website-title h1{
+    margin-bottom: 0;
+    margin-right: 3px;
+}
+
+
+/* MULTISELECT DROPDOWN BOX - START */ 
+.restaurant-item {
+    display: none;
+  }
+
+.searchAndDisplayContainer{
+    display: flex;
+    justify-content: space-between;
+}
+
+.multiselect{
+    margin: 30px 30px 30px 30px;
+    width: 50%;
+    float: left;
+}
+
+.restaurantResults {
+    width: 50%;
+    float: left;
+    border: none;
+    outline:none;
+}
+
+.label{
+    /* display: block; */
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+#multipleSelect{
+    max-width: 100%;
+    width: 350px;
+}
+
+.vscomp-toggle-button{
+    padding: 10px 30px 10px 10px;
+    border-radius: 5px;
+}
+/* MULTISELECT DROPDOWN BOX END */
+
+/* MAPS DROPDOWN BOX START */
+.wrap{
+    width: 1200px;
+    /* margin:30px auto; */
+    margin-top: 200px;
+    display: grid;
+    grid-gap: 50px;
+    grid-template-columns: 300px auto;
+}
+
+.form input{
+    width: 100%;
+    border: none;
+    padding: 20px;
+    font-size: 1em;
+    outline: none;
+    margin-bottom: 5px;
+    background: #ddd;
+    border-radius: 10px;
+    box-sizing: border-box;
+    text-transform: capitalize;
+    -webkit-transition: all 0.5s ;
+	-moz-transition: all 0.5s ;
+	-ms-transition: all 0.5s ;
+	-o-transition: all 0.5s ;
+	transition: all 0.5s ;
+}
+.form input:focus{
+    background: #aaa;
+}
+.form .form__btn{
+    color: #fff;
+    background: rgb(63, 192, 46);
+}
+
+#map{
+    width: 100%;
+    height: 500px;
+    border-radius: 10px;
+}
+/* MAPS DROPDOWN BOX END */
+
+
