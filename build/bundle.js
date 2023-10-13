@@ -995,7 +995,7 @@ var app = (function () {
       icon: 'mdi-account-cowboy-hat',
 
       greeting: 'Hi, my name is James Larson',
-      description: 'I recently graduated from Cornell University with a Bachelor\'s degree in Computer Science and a Minor in Business Management. I am currently applying to software engineering positions primarily in New York City and the San Francisco Bay Area. I can be reached via email at james@jamesxlarson.com.',
+      description: 'I recently graduated from Cornell University with a Bachelor\'s degree in Computer Science and a minor in Business Management. I am currently applying to software engineering positions primarily in New York City and the San Francisco Bay Area. I can be reached via email at james@jamesxlarson.com.',
       birthYear: '2000',
       residence: 'New York, NY',
       freelance: 'james@jamesxlarson.com',
@@ -1061,7 +1061,7 @@ var app = (function () {
             start: '08/2019',
             end: '05/2023',
             institute: 'Cornell University',
-            description: 'I recently graduated from Cornell University with a Bachelor\'s degree in Computer Science and a Minor in Business Management.'
+            description: 'I recently graduated from Cornell University with a Bachelor\'s degree in Computer Science and a minor in Business Management.'
           },
         ]
       },
