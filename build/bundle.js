@@ -1013,7 +1013,7 @@ var app = (function () {
           description: 'I previously played football and lacrosse. I also enjoy golf and I have multiple scuba diving and sailing cerifications.'
         },
         {
-          title: 'Outdoors',
+          title: 'Music',
           icon: 'mdi-music',
           description: 'I have played the violin for over 10 years and I am currently learning how to play the piano.'
         },
@@ -1034,7 +1034,7 @@ var app = (function () {
             start: '02/2023',
             end: 'Present',
             company: 'Stealth Startup',
-            description: 'I launched a fintech startup with the aim of revolutionizing shareholder voting practices through a custom application. Our tech stack that includes Node.js, React.js, TypeScript, MongoDB, Docker, Kubernetes, and the Plaid API. I am prohibited from sharing additional details because of an NDA agreement. Upon accepting a full-time offer I will no longer be significantly involved in this startup.'
+            description: 'I launched a fintech startup with the aim of revolutionizing shareholder voting practices through a custom application. Our tech stack includes Node.js, React.js, TypeScript, MongoDB, Docker, Kubernetes, and the Plaid API. I am prohibited from sharing additional details because of an NDA agreement. Upon accepting a full-time offer I will no longer be significantly involved in this startup.'
           },
           {
             title: 'ChatGPT Prompt Engineer',
