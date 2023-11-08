@@ -173,7 +173,7 @@ var app = (function () {
         return (type, detail, { cancelable = false } = {}) => {
             const callbacks = component.$$.callbacks[type];
             if (callbacks) {
-                // TODO are there situations where events could be dispatched
+                // are there situations where events could be dispatched
                 // in a server (non-DOM) environment?
                 const event = custom_event(type, detail, { cancelable });
                 callbacks.slice().forEach(fn => {
