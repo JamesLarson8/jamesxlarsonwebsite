@@ -1340,7 +1340,7 @@ var app = (function () {
       fullName: 'James Larson',
       profession: 'Software Engineer - Cornell University \'23',
       cv: {
-        url: 'https://drive.google.com/file/d/1wO31OB2-eirGDCM1vICQDHzlPAghFkgz/view?usp=sharing',
+        url: 'https://drive.google.com/file/d/1yYPYow44SotwxbjLxvAdXV6OX0uk0mwA/view?usp=sharing',
         icon: 'mdi-download'
       },
       email: {
